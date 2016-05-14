@@ -4,7 +4,7 @@ class BigInt
 public:
 	BigInt();
 	~BigInt();
-	static const int MAX = 9999;
+	static const int MAX = 1024;
 	static void karatsuba(int *a, int *b, int *ret, int d);
 	static void multiplication(int *a, int *b, int *ret, int d);
 	static void doCarry(int *a, int d);

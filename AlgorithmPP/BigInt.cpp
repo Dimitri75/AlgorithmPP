@@ -77,19 +77,25 @@ void BigInt::doCarry(int *a, int d) {
 }
 
 void BigInt::getNum(int *a, int *d_a) {
+	string input;
 	int c = 0;
 	*d_a = 0;
-	cout << "Entrez un nombre inferieur a " << MAX << " : ";
-	while (!(cin >> c) || c > MAX || c < 0)
+	cout << "Entrez un nombre : ";
+	while (!(cin >> input))
 	{
 		cerr << "Erreur de saisie" << endl;
 		cout << "Nombre : ";
 	}
 
-	string str = to_string(c);
-	for (auto ch : str){
+	for (int ch : input){
+		if (c >= MAX){
+			cout << "Keeping only the first 1024 digits" << endl << endl;
+			break;
+		}
+
 		a[*d_a] = ch - '0';
 		++(*d_a);
+		c++;
 	}
 
 	for (int i = 0; i * 2 < *d_a - 1; i++) {

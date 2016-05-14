@@ -5,15 +5,17 @@
 
 using namespace std;
 
+const int ORDER = 20;
+clock_t start;
+clock_t stop;
+
 Matrix* operator*(Matrix const &a, Matrix const &b){
 	return Matrix::strassen(a, b);
 }
 
 void strassen(){
-	int order = 20;
-
-	Matrix *A = new Matrix(true, order);
-	Matrix *B = new Matrix(true, order);
+	Matrix *A = new Matrix(true, ORDER);
+	Matrix *B = new Matrix(true, ORDER);
 	A->print("A");
 	B->print("B");
 
@@ -31,8 +33,7 @@ void mergeSort(){
 
 void karatsuba() {
 	int a[BigInt::MAX], b[BigInt::MAX];
-	int r[6 * BigInt::MAX
-	];
+	int r[6 * BigInt::MAX];
 	int d_a, d_b;
 	int d = 1;
 
@@ -56,6 +57,7 @@ void karatsuba() {
 	for (i = d_b; i < d; i++)
 		b[i] = 0;
 
+	// Karatsuba
 	BigInt::karatsuba(a, b, r, d);
 	BigInt::doCarry(r, 2 * d);
 	BigInt::printNum(r, 2 * d);
@@ -63,31 +65,26 @@ void karatsuba() {
 
 int _tmain(int argc, _TCHAR* argv[]){
 	std::cout << "TP1 - Dimitri BUHON" << std::endl;
-	int input = -1;
+	string input;
+	int in;
 
-	while (input != 0){
+	while (input != "0"){
 		cout << endl << "Choisir une option (1, 2, 3 ou 0 pour quitter) : ";
 		cin >> input;
 
-		switch (input)
-		{
-		case 0:
-			break;
-		case 1:
+		if (input == "1"){
 			cout << endl << endl << "Exercice 1 : Strassen" << endl;
 			strassen();
-			break;
-		case 2:
+		}
+		else if (input == "2"){
 			cout << endl << endl << "Exercice 2 : Tri" << endl;
 			//mergeSort();
-			break;
-		case 3:
+		}
+		else if (input == "3"){
 			cout << endl << endl << "Exercice 3 : Karatsuba" << endl;
 			karatsuba();
-			break;
-		default:
-			break;
 		}
 	}
+
 	return 0;
 }
