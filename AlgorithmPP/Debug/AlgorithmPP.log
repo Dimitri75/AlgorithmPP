@@ -1,0 +1,11 @@
+﻿La génération a démarré 14/05/2016 13:01:33.
+     1>Projet "D:\DEV\C++\WORKSPACES\visual\AlgorithmPP\AlgorithmPP\AlgorithmPP.vcxproj" sur le nœud 2 (Build cible(s)).
+     1>ClCompile:
+         D:\DEV\MICROSOFT\IDE\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\AlgorithmPP.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt matrix.cpp
+         matrix.cpp
+     1>d:\dev\c++\workspaces\visual\algorithmpp\algorithmpp\matrix.cpp(236): fatal error C1010: fin de fichier inattendue lors de la recherche d'un en-tête précompilé. N'auriez-vous pas oublié d'ajouter '#include "stdafx.h"' à votre source ?
+     1>Génération du projet "D:\DEV\C++\WORKSPACES\visual\AlgorithmPP\AlgorithmPP\AlgorithmPP.vcxproj" terminée (Build cible(s)) -- ÉCHEC.
+
+ÉCHEC de la build.
+
+Temps écoulé 00:00:00.52

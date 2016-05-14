@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Fichiers sources\matrix">
+      <UniqueIdentifier>{36ea5c79-f17f-4096-b01f-b90988b49695}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\sort">
+      <UniqueIdentifier>{1bfe4fa1-eabb-4771-8b51-883d4048b900}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\matrix">
+      <UniqueIdentifier>{3b224e2b-9e4f-47a9-96c1-1d02002cbb41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\sort">
+      <UniqueIdentifier>{332592ea-d1aa-45cc-bc28-5c5769bf0d1b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix.h">
+      <Filter>Fichiers d%27en-tête\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="merge.h">
+      <Filter>Fichiers d%27en-tête\sort</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="AlgorithmPP.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="matrix.cpp">
+      <Filter>Fichiers sources\matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="merge.cpp">
+      <Filter>Fichiers sources\sort</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
