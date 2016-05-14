@@ -5,17 +5,15 @@
 
 using namespace std;
 
-const int ORDER = 20;
-chrono::time_point<chrono::system_clock> start;
-chrono::time_point<chrono::system_clock> stop;
-
 Matrix* operator*(Matrix const &a, Matrix const &b){
 	return Matrix::strassen(a, b);
 }
 
 void strassen(){
-	Matrix *A = new Matrix(true, ORDER);
-	Matrix *B = new Matrix(true, ORDER);
+	int order = 20;
+
+	Matrix *A = new Matrix(true, order);
+	Matrix *B = new Matrix(true, order);
 	A->print("A");
 	B->print("B");
 
@@ -31,13 +29,12 @@ void mergeSort(){
 	cout << input << endl;
 }
 
-int karatsuba() {
+void karatsuba() {
 	int a[BigInt::MAX], b[BigInt::MAX];
-	int r[6 * BigInt::MAX];
+	int r[6 * BigInt::MAX
+	];
 	int d_a, d_b;
 	int d = 1;
-	clock_t start;
-	clock_t stop;
 
 	BigInt::getNum(a, &d_a);
 	BigInt::getNum(b, &d_b);
@@ -45,7 +42,7 @@ int karatsuba() {
 	if (d_a < 0 || d_b < 0) {
 		cout << 0 << endl;
 		exit(0);
-		return 0;
+		return;
 	}
 
 	int i = (d_a > d_b) ? d_a : d_b;
@@ -58,28 +55,10 @@ int karatsuba() {
 
 	for (i = d_b; i < d; i++)
 		b[i] = 0;
-	
-	// Karatsuba
-	start = clock();
-	stop = start + CLOCKS_PER_SEC;
-	for (i = 0; clock() < stop; i++) {
-		BigInt::karatsuba(a, b, r, d);
-		BigInt::doCarry(r, 2 * d);
-	}
-	start = clock() - start;
-	BigInt::printNum(r, 2 * d);
-	cout << "Karatsuba\t" << 1000 * (double)start / CLOCKS_PER_SEC / i << "\t(" << i << " trials)" << endl << endl;
 
-	// Standard
-	start = clock();
-	stop = start + CLOCKS_PER_SEC;
-	for (i = 0; clock() < stop; i++) {
-		BigInt::multiplication(a, b, r, d);
-		BigInt::doCarry(r, 2 * d);
-	}
-	start = clock() - start;
+	BigInt::karatsuba(a, b, r, d);
+	BigInt::doCarry(r, 2 * d);
 	BigInt::printNum(r, 2 * d);
-	cout << "Standard\t" << 1000 * (double)start / CLOCKS_PER_SEC / i << "\t(" << i << " trials)" << endl << endl;
 }
 
 int _tmain(int argc, _TCHAR* argv[]){
@@ -110,7 +89,5 @@ int _tmain(int argc, _TCHAR* argv[]){
 			break;
 		}
 	}
-
-	system("pause");
 	return 0;
 }
