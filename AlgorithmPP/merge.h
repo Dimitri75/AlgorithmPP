@@ -1,11 +1,11 @@
 #pragma once
-class merge
+class Merge
 {
 public:
-	merge();
-	~merge();
+	Merge();
+	~Merge();
 	static int max(int x, int y);
-	static void merge_helper(int *input, int left, int right, int *scratch);
+	static void mergeHelper(int *input, int left, int right, int *scratch);
 	static int sort(int *input, int size);
 };
 

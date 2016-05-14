@@ -14,8 +14,10 @@
 #include <string>
 #include <random>
 #include <chrono>
+#include <math.h>
 #include "matrix.h"
 #include "merge.h"
+#include "bigint.h"
 
 using namespace std;
 

@@ -1,36 +1,36 @@
 #include "stdafx.h"
 #include "matrix.h"
 
-const int CUT = 8;
+#define CUT 8
 const int MAX = 99;
 
-int& matrix::operator()(unsigned col, unsigned row) {
+int& Matrix::operator()(unsigned col, unsigned row) {
 	return grid[col][row];
 }
 
-matrix* matrix::operator+(matrix const &mat){
+Matrix* Matrix::operator+(Matrix const &mat){
 	return addition(*this, mat);
 }
 
-matrix* matrix::operator-(matrix const &mat){
+Matrix* Matrix::operator-(Matrix const &mat){
 	return substraction(*this, mat);
 }
 
-matrix* matrix::operator*(matrix const &mat){
+Matrix* Matrix::operator*(Matrix const &mat){
 	return multiplication(*this, mat);
 }
 
-matrix::matrix(matrix const &mat){
+Matrix::Matrix(Matrix const &mat){
 	n = mat.n;
 	grid = mat.grid;
 }
 
-matrix::matrix(bool fil, int _n) : n(_n)
+Matrix::Matrix(bool fil, int _n) : n(_n)
 {
 	initGrid(fil);
 }
 
-matrix::matrix(matrix topLeftCorner, matrix topRightCorner, matrix botLeftCorner, matrix botRightCorner)
+Matrix::Matrix(Matrix topLeftCorner, Matrix topRightCorner, Matrix botLeftCorner, Matrix botRightCorner)
 {
 	n = topLeftCorner.getOrder() * 2;
 	initGrid(false);
@@ -50,7 +50,7 @@ matrix::matrix(matrix topLeftCorner, matrix topRightCorner, matrix botLeftCorner
 				grid[column][row] = botRightCorner(n / 2 + column, n / 2 + row);
 }
 
-matrix::~matrix(void)
+Matrix::~Matrix(void)
 {
 	/*if (grid != nullptr){
 		for (int i = 0; i < n; i++)
@@ -59,11 +59,11 @@ matrix::~matrix(void)
 	}*/
 }
 
-const int matrix::getOrder(){
+const int Matrix::getOrder(){
 	return n;
 }
 
-int** matrix::getGrid() {
+int** Matrix::getGrid() {
 	return grid;
 }
 
@@ -74,7 +74,7 @@ int random(int max, int min = 0){
 	return dist(engine);
 }
 
-void matrix::initGrid(bool fil){
+void Matrix::initGrid(bool fil){
 	int order = n % 2 == 0 ? n : n + 1;
 
 	grid = new int*[order];
@@ -98,7 +98,7 @@ void matrix::initGrid(bool fil){
 	}
 }
 
-void matrix::print(std::string name){
+void Matrix::print(std::string name){
 	cout << "Print Matrix " << name << endl;
 	for (int column = 0; column < n; column++){
 		for (int line = 0; line < n; line++){
@@ -109,34 +109,34 @@ void matrix::print(std::string name){
 	cout << endl;
 }
 
-matrix* matrix::addition(matrix a, matrix b){
+Matrix* Matrix::addition(Matrix a, Matrix b){
 	return operation(ADDITION, a, b);
 }
 
-matrix* matrix::substraction(matrix a, matrix b){
+Matrix* Matrix::substraction(Matrix a, Matrix b){
 	return operation(SUBSTRACTION, a, b);
 }
 
-matrix* matrix::multiplication(matrix a, matrix b){
+Matrix* Matrix::multiplication(Matrix a, Matrix b){
 	return operation(MULTIPLICATION, a, b);
 }
 
-matrix* matrix::operation(Operation operation, matrix a, matrix b){
+Matrix* Matrix::operation(Operation operation, Matrix a, Matrix b){
 	if (a.getOrder() != b.getOrder())
 		return nullptr;
 
-	matrix *c = new matrix(false, a.getOrder());
+	Matrix *c = new Matrix(false, a.getOrder());
 	for (int column = 0; column < a.getOrder(); column++){
 		for (int line = 0; line < a.getOrder(); line++){
 			switch (operation)
 			{
-				case matrix::ADDITION:
+				case Matrix::ADDITION:
 					(*c)(column, line) = a(column, line) + b(column, line);
 					break;
-				case matrix::SUBSTRACTION:
+				case Matrix::SUBSTRACTION:
 					(*c)(column, line) = a(column, line) - b(column, line);
 					break;
-				case matrix::MULTIPLICATION:
+				case Matrix::MULTIPLICATION:
 					for (int o = 0; o < a.getOrder(); o++)
 						(*c)(column, line) += a.getGrid()[column][o] * b.getGrid()[o][line];
 					break;
@@ -149,11 +149,11 @@ matrix* matrix::operation(Operation operation, matrix a, matrix b){
 	return c;
 }
 
-matrix* matrix::hadamard(matrix a, matrix b){
+Matrix* Matrix::hadamard(Matrix a, Matrix b){
 	if (a.getOrder() != b.getOrder())
 		return nullptr;
 
-	matrix *c = new matrix(false, a.getOrder());
+	Matrix *c = new Matrix(false, a.getOrder());
 	for (int column = 0; column < a.getOrder(); column++){
 		for (int line = 0; line < a.getOrder(); line++){
 			c->getGrid()[column][line] += a.getGrid()[column][line] * b.getGrid()[column][line];
@@ -163,40 +163,40 @@ matrix* matrix::hadamard(matrix a, matrix b){
 	return c;
 }
 
-matrix* matrix::strassen(matrix a, matrix b){
+Matrix* Matrix::strassen(Matrix a, Matrix b){
 	if (a.getOrder() <= CUT)
 		return a * b;
 
-	matrix topLeftA (a.getCorner(matrix::TOP_LEFT));
-	matrix topRightA (a.getCorner(matrix::TOP_RIGHT));
-	matrix botLeftA (a.getCorner(matrix::BOT_LEFT));
-	matrix botRightA (a.getCorner(matrix::BOT_RIGHT));
+	Matrix topLeftA (a.getCorner(Matrix::TOP_LEFT));
+	Matrix topRightA (a.getCorner(Matrix::TOP_RIGHT));
+	Matrix botLeftA (a.getCorner(Matrix::BOT_LEFT));
+	Matrix botRightA (a.getCorner(Matrix::BOT_RIGHT));
 
-	matrix topLeftB (b.getCorner(matrix::TOP_LEFT));
-	matrix topRightB (b.getCorner(matrix::TOP_RIGHT));
-	matrix botLeftB (b.getCorner(matrix::BOT_LEFT));
-	matrix botRightB (b.getCorner(matrix::BOT_RIGHT));
+	Matrix topLeftB (b.getCorner(Matrix::TOP_LEFT));
+	Matrix topRightB (b.getCorner(Matrix::TOP_RIGHT));
+	Matrix botLeftB (b.getCorner(Matrix::BOT_LEFT));
+	Matrix botRightB (b.getCorner(Matrix::BOT_RIGHT));
 
-	matrix m1 (strassen(topLeftA + botRightA, topLeftB + botRightB));
-	matrix m2 (strassen(botLeftA + botRightA, topLeftB));
-	matrix m3 (strassen(topLeftA, topRightB - botRightB));
-	matrix m4 (strassen(botRightA, botLeftB - topLeftB));
-	matrix m5 (strassen(topLeftA + topRightA, botRightB));
-	matrix m6 (strassen(botLeftA - topLeftA, topLeftB + topRightB));
-	matrix m7 (strassen(topRightA - botRightA, botLeftB + botRightB));
+	Matrix m1 (strassen(topLeftA + botRightA, topLeftB + botRightB));
+	Matrix m2 (strassen(botLeftA + botRightA, topLeftB));
+	Matrix m3 (strassen(topLeftA, topRightB - botRightB));
+	Matrix m4 (strassen(botRightA, botLeftB - topLeftB));
+	Matrix m5 (strassen(topLeftA + topRightA, botRightB));
+	Matrix m6 (strassen(botLeftA - topLeftA, topLeftB + topRightB));
+	Matrix m7 (strassen(topRightA - botRightA, botLeftB + botRightB));
 
-	matrix tl ((m1 + m4) - (m5 + m7));
-	matrix tr (m3 + m5);
-	matrix bl (m2 + m4);
-	matrix br (*(m1 - m2) + (m3 + m6));
+	Matrix tl ((m1 + m4) - (m5 + m7));
+	Matrix tr (m3 + m5);
+	Matrix bl (m2 + m4);
+	Matrix br (*(m1 - m2) + (m3 + m6));
 
-	matrix* c = new matrix(tl, tr, bl, br);
+	Matrix* c = new Matrix(tl, tr, bl, br);
 
 	return c;
 }
 
-matrix* matrix::getCorner(Position position) {
-	matrix* corner = new matrix(false, n / 2);
+Matrix* Matrix::getCorner(Position position) {
+	Matrix* corner = new Matrix(false, n / 2);
 
 	switch (position)
 	{

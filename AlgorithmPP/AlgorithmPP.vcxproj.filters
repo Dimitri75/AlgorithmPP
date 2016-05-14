@@ -25,6 +25,12 @@
     <Filter Include="Fichiers d%27en-tête\sort">
       <UniqueIdentifier>{332592ea-d1aa-45cc-bc28-5c5769bf0d1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\bigint">
+      <UniqueIdentifier>{98942ab9-8837-4fa4-aadf-bdc09e8abf21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\bigint">
+      <UniqueIdentifier>{8b6fb59a-1db2-4cbd-8440-202ae9971437}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -36,11 +42,14 @@
     <ClInclude Include="targetver.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="matrix.h">
-      <Filter>Fichiers d%27en-tête\matrix</Filter>
+    <ClInclude Include="BigInt.h">
+      <Filter>Fichiers d%27en-tête\bigint</Filter>
     </ClInclude>
-    <ClInclude Include="merge.h">
+    <ClInclude Include="Merge.h">
       <Filter>Fichiers d%27en-tête\sort</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Fichiers d%27en-tête\matrix</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -50,10 +59,13 @@
     <ClCompile Include="AlgorithmPP.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="matrix.cpp">
+    <ClCompile Include="BigInt.cpp">
+      <Filter>Fichiers sources\bigint</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
       <Filter>Fichiers sources\matrix</Filter>
     </ClCompile>
-    <ClCompile Include="merge.cpp">
+    <ClCompile Include="Merge.cpp">
       <Filter>Fichiers sources\sort</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,11 +1,17 @@
-﻿La génération a démarré 14/05/2016 13:01:33.
+﻿La génération a démarré 14/05/2016 17:38:53.
      1>Projet "D:\DEV\C++\WORKSPACES\visual\AlgorithmPP\AlgorithmPP\AlgorithmPP.vcxproj" sur le nœud 2 (Build cible(s)).
      1>ClCompile:
-         D:\DEV\MICROSOFT\IDE\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\AlgorithmPP.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt matrix.cpp
-         matrix.cpp
-     1>d:\dev\c++\workspaces\visual\algorithmpp\algorithmpp\matrix.cpp(236): fatal error C1010: fin de fichier inattendue lors de la recherche d'un en-tête précompilé. N'auriez-vous pas oublié d'ajouter '#include "stdafx.h"' à votre source ?
-     1>Génération du projet "D:\DEV\C++\WORKSPACES\visual\AlgorithmPP\AlgorithmPP\AlgorithmPP.vcxproj" terminée (Build cible(s)) -- ÉCHEC.
+         D:\DEV\MICROSOFT\IDE\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\AlgorithmPP.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt BigInt.cpp
+         BigInt.cpp
+       Link:
+         D:\DEV\MICROSOFT\IDE\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\DEV\C++\WORKSPACES\visual\AlgorithmPP\Debug\AlgorithmPP.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\DEV\C++\WORKSPACES\visual\AlgorithmPP\Debug\AlgorithmPP.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\DEV\C++\WORKSPACES\visual\AlgorithmPP\Debug\AlgorithmPP.lib" /MACHINE:X86 Debug\AlgorithmPP.obj
+         Debug\BigInt.obj
+         Debug\Matrix.obj
+         Debug\Merge.obj
+         Debug\stdafx.obj
+         AlgorithmPP.vcxproj -> D:\DEV\C++\WORKSPACES\visual\AlgorithmPP\Debug\AlgorithmPP.exe
+     1>Génération du projet "D:\DEV\C++\WORKSPACES\visual\AlgorithmPP\AlgorithmPP\AlgorithmPP.vcxproj" terminée (Build cible(s)).
 
-ÉCHEC de la build.
+La génération a réussi.
 
-Temps écoulé 00:00:00.52
+Temps écoulé 00:00:01.30

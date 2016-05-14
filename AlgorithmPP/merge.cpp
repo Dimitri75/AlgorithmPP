@@ -2,20 +2,20 @@
 #include "merge.h"
 
 
-merge::merge()
+Merge::Merge()
 {
 }
 
 
-merge::~merge()
+Merge::~Merge()
 {
 }
 
-int merge::max(int x, int y){
+int Merge::max(int x, int y){
 	return x > y ? x : y;
 }
 
-void merge::merge_helper(int *input, int left, int right, int *scratch){
+void Merge::mergeHelper(int *input, int left, int right, int *scratch){
 	if (right == left + 1)
 		return;
 
@@ -24,8 +24,8 @@ void merge::merge_helper(int *input, int left, int right, int *scratch){
 	int midpointDistance = length / 2;
 	int l = left, r = left + midpointDistance;
 
-	merge_helper(input, left, left + midpointDistance, scratch);
-	merge_helper(input, left + midpointDistance, right, scratch);
+	mergeHelper(input, left, left + midpointDistance, scratch);
+	mergeHelper(input, left + midpointDistance, right, scratch);
 
 	for (i = 0; i < length; i++){
 		if (l < left + midpointDistance && (r == right || max(input[l], input[r]) == input[l])){
@@ -43,10 +43,10 @@ void merge::merge_helper(int *input, int left, int right, int *scratch){
 }
 
 // Elements are sorted from the greatest to the least
-int merge::sort(int *input, int size){
+int Merge::sort(int *input, int size){
 	int *scratch = new int;
 	if (scratch != NULL){
-		merge_helper(input, 0, size, scratch);
+		mergeHelper(input, 0, size, scratch);
 		free(scratch);
 		return 1;
 	}
