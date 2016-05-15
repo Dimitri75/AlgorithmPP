@@ -6,7 +6,7 @@ public:
 	BigInt(int* _value);
 	~BigInt();
 	static const int MAX = 1024;
-	int value[MAX];
+	int* value;
 	int d_value;
 
 	void karatsuba(BigInt &nb);

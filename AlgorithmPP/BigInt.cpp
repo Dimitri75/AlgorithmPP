@@ -13,11 +13,12 @@ void BigInt::operator*(BigInt &nb){
 
 BigInt::BigInt()
 {
+	value = new int[MAX];
 	getNum(value, &d_value);
 }
 
 BigInt::BigInt(int* _value){
-	*value = *_value;
+	value = _value;
 }
 
 
@@ -49,7 +50,7 @@ void BigInt::karatsuba(BigInt &a, BigInt &b){
 		a.value[i] = 0;
 
 	for (i = b.d_value; i < d; i++)
-		*b(i) = 0;
+		b.value[i] = 0;
 
 	// Karatsuba
 	BigInt::karatsubaHelper(a, b, r, d);
@@ -58,6 +59,11 @@ void BigInt::karatsuba(BigInt &a, BigInt &b){
 }
 
 void BigInt::karatsubaHelper(BigInt &a, BigInt &b, int *ret, int d) {
+	if (d <= CUT) {
+		multiplication(a.value, b.value, ret, d);
+		return;
+	}
+
 	BigInt *ar = new BigInt(a(0));
 	BigInt *al = new BigInt(a(d / 2));
 	BigInt *br = new BigInt(b(0));
@@ -69,11 +75,6 @@ void BigInt::karatsubaHelper(BigInt &a, BigInt &b, int *ret, int d) {
 	int *x1 = &ret[d * 0];
 	int *x2 = &ret[d * 1];
 	int *x3 = &ret[d * 2];
-
-	if (d <= CUT) {
-		multiplication(a.value, b.value, ret, d);
-		return;
-	}
 
 	for (int i = 0; i < d / 2; i++) {
 		asum->value[i] = al->value[i] + ar->value[i];
