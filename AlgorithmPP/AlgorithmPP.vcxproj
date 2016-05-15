@@ -86,7 +86,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AlgorithmPP.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="BigInt.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Merge.cpp" />

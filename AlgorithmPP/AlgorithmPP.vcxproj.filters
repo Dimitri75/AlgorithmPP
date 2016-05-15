@@ -56,9 +56,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="AlgorithmPP.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="BigInt.cpp">
       <Filter>Fichiers sources\bigint</Filter>
     </ClCompile>
@@ -67,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="Merge.cpp">
       <Filter>Fichiers sources\sort</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

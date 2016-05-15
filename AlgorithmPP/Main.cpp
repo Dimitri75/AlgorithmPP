@@ -1,11 +1,11 @@
-// AlgorithmPP.cpp : définit le point d'entrée pour l'application console.
-//
+// Main.cpp : définit le point d'entrée pour l'application console.
 
 #include "stdafx.h"
 
 using namespace std;
 
-const int ORDER = 30;
+const int ORDER = 32;
+
 
 void strassen(){
 	Matrix *a = new Matrix(true, ORDER);
@@ -16,7 +16,7 @@ void strassen(){
 	Matrix c = (*a) * (*b);
 	c.print("C = A * B (using strassen algorithm)");
 
-	//Matrix::multiplication(*a, *b)->print("STANDARD");
+	Matrix::multiplication(*a, *b)->print("C = A * B (using standard multiplication algorithm)");
 }
 
 void mergeSort(){
@@ -31,14 +31,21 @@ void karatsuba() {
 	BigInt *a = new BigInt;
 	BigInt *b = new BigInt;
 
-	(*a) * (*b);
+	BigInt *c = (*a) * (*b);
+	c->print();
 }
+
 
 int _tmain(int argc, _TCHAR* argv[]){
 	std::cout << "TP1 - Dimitri BUHON" << std::endl;
 	string input;
 	while (input != "0"){
-		cout << endl << "Choisir une option (1, 2, 3 ou 0 pour quitter) : ";
+		cout << endl << "Choisir une option : " << endl
+			<< "1 - Strassen" << endl
+			<< "2 - Tri" << endl
+			<< "3 - Karatsuba" << endl
+			<< "0 - Quitter" << endl << endl;
+
 		cin >> input;
 
 		if (input == "1"){

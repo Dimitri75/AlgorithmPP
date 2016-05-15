@@ -13,7 +13,7 @@ AlgorithmPP.vcxproj
 AlgorithmPP.vcxproj.filters
     Il s'agit du fichier de filtres pour les projets VC++ générés à l'aide d'un Assistant Application. Il contient des informations sur l'association entre les fichiers de votre projet et les filtres. Cette association est utilisée dans l'IDE pour afficher le regroupement des fichiers qui ont des extensions similaires sous un nœud spécifique (par exemple, les fichiers ".cpp" sont associés au filtre "Fichiers sources").
 
-AlgorithmPP.cpp
+Main.cpp
     Il s'agit du fichier source principal de l'application.
 
 /////////////////////////////////////////////////////////////////////////////

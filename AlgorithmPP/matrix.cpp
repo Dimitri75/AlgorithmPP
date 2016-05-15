@@ -113,7 +113,7 @@ void Matrix::print(std::string name){
 	cout << "Print Matrix " << name << endl;
 	for (int row = 0; row < order; row++){
 		for (int column = 0; column < order; column++){
-			cout << "" << grid[row][column] << "\t";
+			cout << "" << grid[row][column] << " ";
 		}
 		cout << endl;
 	}
