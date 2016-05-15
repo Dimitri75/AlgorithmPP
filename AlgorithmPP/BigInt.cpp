@@ -3,43 +3,86 @@
 
 #define CUT 4
 
-void BigInt::operator*(const int &b){
+int* BigInt::operator()(unsigned const& i){
+	return &value[i];
+}
 
+void BigInt::operator*(BigInt &nb){
+	karatsuba(*this, nb);
 }
 
 BigInt::BigInt()
 {
+	getNum(value, &d_value);
+}
+
+BigInt::BigInt(int* _value){
+	*value = *_value;
 }
 
 
 BigInt::~BigInt()
 {
+	delete[] value;
 }
 
-void BigInt::karatsuba(int *a, int *b, int *ret, int d) {
-	int *ar = &a[0];
-	int *al = &a[d / 2];
-	int *br = &b[0];
-	int *bl = &b[d / 2];
-	int *asum = &ret[d * 5];
-	int *bsum = &ret[d * 5 + d / 2];
+void BigInt::karatsuba(BigInt &nb){
+	karatsuba(*this, nb);
+}
+
+void BigInt::karatsuba(BigInt &a, BigInt &b){
+	int d = 1;
+	int r[6 * BigInt::MAX];
+
+	if (a.d_value < 0 || b.d_value < 0) {
+		cout << 0 << endl;
+		exit(0);
+		return;
+	}
+
+	int i = (a.d_value > b.d_value) ? a.d_value : b.d_value;
+
+	while (d < i)
+		d *= 2;
+
+	for (i = a.d_value; i < d; i++)
+		a.value[i] = 0;
+
+	for (i = b.d_value; i < d; i++)
+		*b(i) = 0;
+
+	// Karatsuba
+	BigInt::karatsubaHelper(a, b, r, d);
+	BigInt::doCarry(r, 2 * d);
+	BigInt::printNum(r, 2 * d);
+}
+
+void BigInt::karatsubaHelper(BigInt &a, BigInt &b, int *ret, int d) {
+	BigInt *ar = new BigInt(a(0));
+	BigInt *al = new BigInt(a(d / 2));
+	BigInt *br = new BigInt(b(0));
+	BigInt *bl = new BigInt(b(d / 2));
+
+	BigInt *asum = new BigInt(&ret[d * 5]);
+	BigInt *bsum = new BigInt(&ret[d * 5 + d / 2]);
+
 	int *x1 = &ret[d * 0];
 	int *x2 = &ret[d * 1];
 	int *x3 = &ret[d * 2];
 
 	if (d <= CUT) {
-		multiplication(a, b, ret, d);
+		multiplication(a.value, b.value, ret, d);
 		return;
 	}
 
 	for (int i = 0; i < d / 2; i++) {
-		asum[i] = al[i] + ar[i];
-		bsum[i] = bl[i] + br[i];
+		asum->value[i] = al->value[i] + ar->value[i];
+		bsum->value[i] = bl->value[i] + br->value[i];
 	}
 
-	karatsuba(ar, br, x1, d / 2);
-	karatsuba(al, bl, x2, d / 2);
-	karatsuba(asum, bsum, x3, d / 2);
+	karatsubaHelper(*ar, *br, x1, d / 2);
+	karatsubaHelper(*al, *bl, x2, d / 2);
+	karatsubaHelper(*asum, *bsum, x3, d / 2);
 
 	for (int i = 0; i < d; i++) 
 		x3[i] = x3[i] - x1[i] - x2[i];
@@ -89,7 +132,7 @@ void BigInt::getNum(int *a, int *d_a) {
 
 	for (int ch : input){
 		if (c >= MAX){
-			cout << "Keeping only the first 1024 digits" << endl << endl;
+			cout << "Seuls les " << MAX << " premiers chiffres seront gardés." << endl << endl;
 			break;
 		}
 

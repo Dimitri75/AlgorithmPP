@@ -5,22 +5,18 @@
 
 using namespace std;
 
-const int ORDER = 20;
-clock_t start;
-clock_t stop;
-
-Matrix* operator*(Matrix const &a, Matrix const &b){
-	return Matrix::strassen(a, b);
-}
+const int ORDER = 30;
 
 void strassen(){
-	Matrix *A = new Matrix(true, ORDER);
-	Matrix *B = new Matrix(true, ORDER);
-	A->print("A");
-	B->print("B");
+	Matrix *a = new Matrix(true, ORDER);
+	Matrix *b = new Matrix(true, ORDER);
+	a->print("A");
+	b->print("B");
 
-	Matrix *C = (*A) * (*B);
-	C->print("C = A * B (using strassen algorithm)");
+	Matrix c = (*a) * (*b);
+	c.print("C = A * B (using strassen algorithm)");
+
+	//Matrix::multiplication(*a, *b)->print("STANDARD");
 }
 
 void mergeSort(){
@@ -32,42 +28,15 @@ void mergeSort(){
 }
 
 void karatsuba() {
-	int a[BigInt::MAX], b[BigInt::MAX];
-	int r[6 * BigInt::MAX];
-	int d_a, d_b;
-	int d = 1;
+	BigInt *a = new BigInt;
+	BigInt *b = new BigInt;
 
-	BigInt::getNum(a, &d_a);
-	BigInt::getNum(b, &d_b);
-
-	if (d_a < 0 || d_b < 0) {
-		cout << 0 << endl;
-		exit(0);
-		return;
-	}
-
-	int i = (d_a > d_b) ? d_a : d_b;
-
-	while (d < i)
-		d *= 2;
-
-	for (i = d_a; i < d; i++)
-		a[i] = 0;
-
-	for (i = d_b; i < d; i++)
-		b[i] = 0;
-
-	// Karatsuba
-	BigInt::karatsuba(a, b, r, d);
-	BigInt::doCarry(r, 2 * d);
-	BigInt::printNum(r, 2 * d);
+	(*a) * (*b);
 }
 
 int _tmain(int argc, _TCHAR* argv[]){
 	std::cout << "TP1 - Dimitri BUHON" << std::endl;
 	string input;
-	int in;
-
 	while (input != "0"){
 		cout << endl << "Choisir une option (1, 2, 3 ou 0 pour quitter) : ";
 		cin >> input;

@@ -1,27 +1,28 @@
 #include "stdafx.h"
 #include "matrix.h"
 
-#define CUT 8
+#define CUT 4
 const int MAX = 99;
 
-int& Matrix::operator()(unsigned col, unsigned row) {
-	return grid[col][row];
+int& Matrix::operator()(unsigned row, unsigned col) {
+	return grid[row][col];
 }
 
-Matrix* Matrix::operator+(Matrix const &mat){
-	return addition(*this, mat);
+Matrix Matrix::operator+(Matrix &mat){
+	return *(addition(*this, mat));
 }
 
-Matrix* Matrix::operator-(Matrix const &mat){
-	return substraction(*this, mat);
+Matrix Matrix::operator-(Matrix &mat){
+	return *(substraction(*this, mat));
 }
 
-Matrix* Matrix::operator*(Matrix const &mat){
-	return multiplication(*this, mat);
+Matrix Matrix::operator*(Matrix &mat){
+	return *(strassen(*this, mat));
 }
 
 Matrix::Matrix(Matrix const &mat){
 	n = mat.n;
+	order = mat.order;
 	grid = mat.grid;
 }
 
@@ -30,24 +31,28 @@ Matrix::Matrix(bool fil, int _n) : n(_n)
 	initGrid(fil);
 }
 
-Matrix::Matrix(Matrix topLeftCorner, Matrix topRightCorner, Matrix botLeftCorner, Matrix botRightCorner)
+Matrix::Matrix(Matrix topLeftCorner, Matrix topRightCorner, Matrix botLeftCorner, Matrix botRightCorner, int _order)
 {
-	n = topLeftCorner.getOrder() * 2;
+	int cornerOrder = topLeftCorner.getOrder();
+	n = cornerOrder * 2;
 	initGrid(false);
+	order = _order;
 
-	for (int column = 0; column < n; column++)
-		for (int row = 0; row < n; row++)
-			if (column < n / 2 && row < n / 2)
-				grid[column][row] = topLeftCorner(column, row);
+	for (int row = 0; row < cornerOrder; row++)
+		for (int column = 0; column < cornerOrder; column++)
+				grid[row][column] = topLeftCorner(row, column);
 
-			else if (column < n / 2 && row >= n / 2)
-				grid[column][row] = topRightCorner(column, n / 2 + row);
+	for (int row = 0; row < cornerOrder; row++)
+		for (int column = cornerOrder; column < n; column++)
+			grid[row][column] = topRightCorner(row, column % cornerOrder);
 
-			else if (column >= n / 2 && row < n / 2)
-				grid[column][row] = botLeftCorner(n / 2 + column, row);
+	for (int row = cornerOrder; row < n; row++)
+		for (int column = 0; column < cornerOrder; column++)
+			grid[row][column] = botLeftCorner(row % cornerOrder, column);
 
-			else if (column >= n / 2 && row >= n / 2)
-				grid[column][row] = botRightCorner(n / 2 + column, n / 2 + row);
+	for (int row = cornerOrder; row < n; row++)
+		for (int column = cornerOrder; column < n; column++)
+			grid[row][column] = botRightCorner(row % cornerOrder, column % cornerOrder);
 }
 
 Matrix::~Matrix(void)
@@ -75,34 +80,40 @@ int random(int max, int min = 0){
 }
 
 void Matrix::initGrid(bool fil){
-	int order = n % 2 == 0 ? n : n + 1;
+	order = n;
 
-	grid = new int*[order];
+	n = 1;
+	while (n < order)
+		n *= 2;
 
-	int column, line;
-	for (column = 0; column < n; column++){
-		grid[column] = new int[order];
+	grid = new int*[n];
+	int row, column;
+	for (row = 0; row < order; row++){
+		grid[row] = new int[n];
 
-		for (line = 0; line < n; line++){
-			grid[column][line] = fil ? random(MAX) : 0;
+		for (column = 0; column < order; column++){
+			grid[row][column] = fil ? random(MAX) : 0;
 		}
 	}
 
 	if (order != n){
-		grid[column] = new int[order];
-		for (int i = 0; i < order; i++){
-			grid[column][i] = 0;
-			grid[i][line] = 0;
+		for (int i = row; i < n; i++)
+			grid[i] = new int[n];
+
+		for (; row < n; row++){
+			for (int c = 0; c < n; c++){
+				grid[row][c] = 0;
+				grid[c][row] = 0;
+			}
 		}
-		n = order;
 	}
 }
 
 void Matrix::print(std::string name){
 	cout << "Print Matrix " << name << endl;
-	for (int column = 0; column < n; column++){
-		for (int line = 0; line < n; line++){
-			cout << "" << grid[column][line] << "\t";
+	for (int row = 0; row < order; row++){
+		for (int column = 0; column < order; column++){
+			cout << "" << grid[row][column] << "\t";
 		}
 		cout << endl;
 	}
@@ -121,24 +132,28 @@ Matrix* Matrix::multiplication(Matrix a, Matrix b){
 	return operation(MULTIPLICATION, a, b);
 }
 
+Matrix* Matrix::multiplies(Matrix &mat){
+	return multiplication(*this, mat);
+}
+
 Matrix* Matrix::operation(Operation operation, Matrix a, Matrix b){
 	if (a.getOrder() != b.getOrder())
 		return nullptr;
 
 	Matrix *c = new Matrix(false, a.getOrder());
-	for (int column = 0; column < a.getOrder(); column++){
-		for (int line = 0; line < a.getOrder(); line++){
+	for (int row = 0; row < a.getOrder(); row++){
+		for (int column = 0; column < a.getOrder(); column++){
 			switch (operation)
 			{
 				case Matrix::ADDITION:
-					(*c)(column, line) = a(column, line) + b(column, line);
+					(*c)(row, column) = a(row, column) + b(row, column);
 					break;
 				case Matrix::SUBSTRACTION:
-					(*c)(column, line) = a(column, line) - b(column, line);
+					(*c)(row, column) = a(row, column) - b(row, column);
 					break;
 				case Matrix::MULTIPLICATION:
 					for (int o = 0; o < a.getOrder(); o++)
-						(*c)(column, line) += a.getGrid()[column][o] * b.getGrid()[o][line];
+						(*c)(row, column) += a(row, o) * b(o, column);
 					break;
 				default:
 					break;
@@ -154,77 +169,77 @@ Matrix* Matrix::hadamard(Matrix a, Matrix b){
 		return nullptr;
 
 	Matrix *c = new Matrix(false, a.getOrder());
-	for (int column = 0; column < a.getOrder(); column++){
-		for (int line = 0; line < a.getOrder(); line++){
-			c->getGrid()[column][line] += a.getGrid()[column][line] * b.getGrid()[column][line];
+	for (int row = 0; row < a.getOrder(); row++){
+		for (int column = 0; column < a.getOrder(); column++){
+			c->getGrid()[row][column] += a.getGrid()[row][column] * b.getGrid()[row][column];
 		}
 	}
 
 	return c;
 }
 
+
 Matrix* Matrix::strassen(Matrix a, Matrix b){
 	if (a.getOrder() <= CUT)
-		return a * b;
+		return multiplication(a, b);
 
-	Matrix topLeftA (a.getCorner(Matrix::TOP_LEFT));
-	Matrix topRightA (a.getCorner(Matrix::TOP_RIGHT));
-	Matrix botLeftA (a.getCorner(Matrix::BOT_LEFT));
-	Matrix botRightA (a.getCorner(Matrix::BOT_RIGHT));
+	Matrix a11 (*a.getCorner(Matrix::TOP_LEFT));
+	Matrix a12 (*a.getCorner(Matrix::TOP_RIGHT));
+	Matrix a21 (*a.getCorner(Matrix::BOT_LEFT));
+	Matrix a22 (*a.getCorner(Matrix::BOT_RIGHT));
 
-	Matrix topLeftB (b.getCorner(Matrix::TOP_LEFT));
-	Matrix topRightB (b.getCorner(Matrix::TOP_RIGHT));
-	Matrix botLeftB (b.getCorner(Matrix::BOT_LEFT));
-	Matrix botRightB (b.getCorner(Matrix::BOT_RIGHT));
+	Matrix b11 (*b.getCorner(Matrix::TOP_LEFT));
+	Matrix b12 (*b.getCorner(Matrix::TOP_RIGHT));
+	Matrix b21 (*b.getCorner(Matrix::BOT_LEFT));
+	Matrix b22 (*b.getCorner(Matrix::BOT_RIGHT));
 
-	Matrix m1 (strassen(topLeftA + botRightA, topLeftB + botRightB));
-	Matrix m2 (strassen(botLeftA + botRightA, topLeftB));
-	Matrix m3 (strassen(topLeftA, topRightB - botRightB));
-	Matrix m4 (strassen(botRightA, botLeftB - topLeftB));
-	Matrix m5 (strassen(topLeftA + topRightA, botRightB));
-	Matrix m6 (strassen(botLeftA - topLeftA, topLeftB + topRightB));
-	Matrix m7 (strassen(topRightA - botRightA, botLeftB + botRightB));
+	Matrix m1 = (a11 + a22) * (b11 + b22);
+	Matrix m2 = (a21 + a22) * b11;
+	Matrix m3 = a11 * (b12 - b22);
+	Matrix m4 = a22 * (b21 - b11);
+	Matrix m5 = (a11 + a12) * b22;
+	Matrix m6 = (a21 - a11) * (b11 + b12);
+	Matrix m7 = (a12 - a22) * (b21 + b22);
 
-	Matrix tl ((m1 + m4) - (m5 + m7));
-	Matrix tr (m3 + m5);
-	Matrix bl (m2 + m4);
-	Matrix br (*(m1 - m2) + (m3 + m6));
+	Matrix c11 = m1 + m4 - m5 + m7;
+	Matrix c12 = m3 + m5;
+	Matrix c21 = m2 + m4;
+	Matrix c22 = m1 - m2 + m3 + m6;
 
-	Matrix* c = new Matrix(tl, tr, bl, br);
-
-	return c;
+	return new Matrix(c11, c12, c21, c22, a.order);
 }
 
 Matrix* Matrix::getCorner(Position position) {
-	Matrix* corner = new Matrix(false, n / 2);
+	int order = n / 2;
+	Matrix* corner = new Matrix(false, order);
 
 	switch (position)
 	{
 	case TOP_LEFT: {
-		for (int column = 0; column < corner->getOrder(); column++)
-			for (int line = 0; line < corner->getOrder(); line++)
-				(*corner)(column, line) = grid[column][line];
+		for (int row = 0; row < order; row++)
+			for (int column = 0; column < order; column++)
+				(*corner)(row, column) = grid[row][column];
 
 		break;
 	}
 	case TOP_RIGHT: {
-		for (int column = 0; column < corner->getOrder(); column++)
-			for (int line = corner->getOrder(); line < n; line++)
-				(*corner)(column, line % corner->getOrder()) = grid[column][line];
+		for (int row = 0; row < order; row++)
+			for (int column = order; column < n; column++)
+				(*corner)(row, column % order) = grid[row][column];
 
 		break;
 	}
 	case BOT_LEFT: {
-		for (int column = corner->getOrder(); column < n; column++)
-			for (int line = 0; line < corner->getOrder(); line++)
-				(*corner)(column % corner->getOrder(), line) = grid[column][line];
+		for (int row = order; row < n; row++)
+			for (int column = 0; column < order; column++)
+				(*corner)(row % order, column) = grid[row][column];
 
 		break;
 	}
 	case BOT_RIGHT: {
-		for (int column = corner->getOrder(); column < n; column++)
-			for (int line = corner->getOrder(); line < n; line++)
-				(*corner)(column % corner->getOrder(), line % corner->getOrder()) = grid[column][line];
+		for (int row = order; row < n; row++)
+			for (int column = order; column < n; column++)
+				(*corner)(row % order, column % order) = grid[row][column];
 
 		break;
 	}

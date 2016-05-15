@@ -9,12 +9,11 @@ class Matrix
 
 		Matrix(Matrix const&);
 		Matrix(bool fil = false, int _n = 4);
-		Matrix(Matrix topLeftCorner, Matrix topRightCorner, Matrix botLeftCorner, Matrix botRightCorner);
+		Matrix(Matrix topLeftCorner, Matrix topRightCorner, Matrix botLeftCorner, Matrix botRightCorner, int _order);
 		~Matrix(void);
 
 		const int getOrder();
 		int** getGrid();
-		Matrix* getCorner(Position);
 		void print(std::string name = "");
 		static Matrix* operation(Operation, Matrix, Matrix);
 		static Matrix* addition(Matrix, Matrix);
@@ -23,20 +22,18 @@ class Matrix
 		static Matrix* hadamard(Matrix, Matrix);
 		static Matrix* strassen(Matrix, Matrix);
 
-		Matrix* operator+(Matrix const&);
-		Matrix* operator-(Matrix const&);
-		Matrix* operator*(Matrix const&);
+		Matrix operator+(Matrix &);
+		Matrix operator-(Matrix &);
+		Matrix operator*(Matrix &);
 		int& operator()(unsigned row, unsigned col);
 		int operator()(unsigned row, unsigned col) const;
 
 	private:
-		int n;
+		int n, order;
 		int **grid;
-		Matrix* gridTopLeft;
-		Matrix* gridTopRight;
-		Matrix* gridBottomLeft;
-		Matrix* gridBottomRight;
 		void initGrid(bool fil);
-		void initGrids(bool fil);
+		Matrix* multiplies(Matrix &mat);
+		Matrix* getCorner(Position);
+
 };
 
