@@ -41,7 +41,7 @@ BigInt* BigInt::karatsuba(BigInt &a, BigInt &b){
 	r->d_value = 1;
 
 	if (a.d_value < 0 || b.d_value < 0) {
-		cout << 0 << endl;
+		std::cout << 0 << std::endl;
 		exit(0);
 		return nullptr;
 	}
@@ -124,24 +124,24 @@ void BigInt::carry() {
 	}
 
 	if (c != 0)
-		cout << stderr << " Overflow " << c << endl;
+		std::cout << stderr << " Overflow " << c << std::endl;
 }
 
 void BigInt::getInput() {
-	string input;
+	std::string input;
 	int c = 0;
 
 	d_value = 0;
-	cout << "Entrez un nombre : ";
-	while (!(cin >> input))
+	std::cout << "Entrez un nombre : ";
+	while (!(std::cin >> input))
 	{
-		cerr << "Erreur de saisie" << endl;
-		cout << "Nombre : ";
+		std::cerr << "Erreur de saisie" << std::endl;
+		std::cout << "Nombre : ";
 	}
 
 	for (int ch : input){
 		if (c >= MAX){
-			cout << "Seuls les " << MAX << " premiers chiffres seront gardés." << endl << endl;
+			std::cout << "Seuls les " << MAX << " premiers chiffres seront gardés." << std::endl << std::endl;
 			break;
 		}
 
@@ -164,6 +164,6 @@ void BigInt::print() {
 			break;
 
 	for (; i >= 0; i--)
-		cout << value[i];
-	cout << endl;
+		std::cout << value[i];
+	std::cout << std::endl;
 }

@@ -45,11 +45,11 @@
     <ClInclude Include="BigInt.h">
       <Filter>Fichiers d%27en-tête\bigint</Filter>
     </ClInclude>
-    <ClInclude Include="Merge.h">
-      <Filter>Fichiers d%27en-tête\sort</Filter>
-    </ClInclude>
     <ClInclude Include="Matrix.h">
       <Filter>Fichiers d%27en-tête\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Sort.h">
+      <Filter>Fichiers d%27en-tête\sort</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -62,10 +62,13 @@
     <ClCompile Include="Matrix.cpp">
       <Filter>Fichiers sources\matrix</Filter>
     </ClCompile>
-    <ClCompile Include="Merge.cpp">
+    <ClCompile Include="Main.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Sort.cpp">
       <Filter>Fichiers sources\sort</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="Source.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

@@ -14,11 +14,14 @@
 #include <string>
 #include <random>
 #include <chrono>
-#include <math.h>
-#include "matrix.h"
-#include "merge.h"
-#include "bigint.h"
+#include <cmath>
+#include <conio.h>
+#include <cstdlib>
+#include <map>
+#include <array>
 
-using namespace std;
+#include "matrix.h"
+#include "bigint.h"
+#include "sort.h"
 
 // TODO: faites référence ici aux en-têtes supplémentaires nécessaires au programme

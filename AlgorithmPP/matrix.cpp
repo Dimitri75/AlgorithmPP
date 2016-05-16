@@ -4,6 +4,13 @@
 #define CUT 4
 const int MAX = 99;
 
+int random(int max, int min = 0){
+	std::random_device seeder;
+	std::mt19937 engine(seeder());
+	std::uniform_int_distribution<int> dist(min, max);
+	return dist(engine);
+}
+
 int& Matrix::operator()(unsigned row, unsigned col) {
 	return grid[row][col];
 }
@@ -72,13 +79,6 @@ int** Matrix::getGrid() {
 	return grid;
 }
 
-int random(int max, int min = 0){
-	random_device seeder;
-	mt19937 engine(seeder());
-	uniform_int_distribution<int> dist(min, max);
-	return dist(engine);
-}
-
 void Matrix::initGrid(bool fil){
 	order = n;
 
@@ -110,14 +110,14 @@ void Matrix::initGrid(bool fil){
 }
 
 void Matrix::print(std::string name){
-	cout << "Print Matrix " << name << endl;
+	std::cout << "Print Matrix " << name << std::endl;
 	for (int row = 0; row < order; row++){
 		for (int column = 0; column < order; column++){
-			cout << "" << grid[row][column] << " ";
+			std::cout << "" << grid[row][column] << " ";
 		}
-		cout << endl;
+		std::cout << std::endl;
 	}
-	cout << endl;
+	std::cout << std::endl;
 }
 
 Matrix* Matrix::addition(Matrix a, Matrix b){
