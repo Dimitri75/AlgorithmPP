@@ -1,3 +1,5 @@
+// Dimitri BUHON - Algorithmes de tri
+
 #include "stdafx.h"
 #include "Sort.h"
 

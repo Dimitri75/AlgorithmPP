@@ -1,3 +1,5 @@
+// Dimitri BUHON - Strassen
+
 #pragma once
 class Matrix
 {

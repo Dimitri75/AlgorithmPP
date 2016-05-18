@@ -1,32 +1,44 @@
+// Dimitri BUHON
 // Main.cpp : définit le point d'entrée pour l'application console.
 
 #include "stdafx.h"
 
 typedef void(*FPTR)(int*, int);
 enum SortEnum { BUBBLE, SELECTION, INSERTION, SHELL, MERGE, QUICKSORT, RANDQUICKSORT, RADIX, HEAPSORT, STL_SORT, STL_STABLESORT, STL_SORTHEAP, EndEnum };
+enum SortType { NON_SORTED, SORTED, REVERSED_SORTED };
 
 std::map<SortEnum, FPTR> sort;
 
 std::chrono::high_resolution_clock::time_point timerStart, timerStop;
 std::chrono::duration<double> time_span;
 int ARRAY_SIZE = 100000;
-const int ORDER = 32;
 
 void strassen();
 void karatsuba();
 void sortDisplay();
+void sortAverageTime(SortType sortType);
 std::string toString(SortEnum sortEnum);
 void initSortMap();
 void initResultList(std::list<std::pair<SortEnum, double>> *list);
 void fillArray(int *a);
 void printArray(int *a, int size, std::string message = "");
 int* copy(int*, int*);
-double execution(int*, SortEnum);
+double execution(int*, SortEnum, bool display);
 
+inline bool is_number(const std::string& s){
+	return count_if(s.begin(), s.end(), isdigit) == s.size();
+}
 
 void strassen(){
-	Matrix *a = new Matrix(true, ORDER);
-	Matrix *b = new Matrix(true, ORDER);
+	std::string input;
+	std::cout << "   Choisir un ordre n : ";
+	while (!(std::cin >> input) || !is_number(input)){
+		std::cerr << "   Erreur de saisie" << std::endl;
+		std::cout << "   Choisir un ordre n : ";
+	}
+
+	Matrix *a = new Matrix(true, std::stoi(input));
+	Matrix *b = new Matrix(true, std::stoi(input));
 	a->print("A");
 	b->print("B");
 
@@ -128,12 +140,16 @@ int* copy(int* a, int* cpy){
 }
 
 // Execute an algorithm and return the timer taken
-double execution(int* _array, int* arrayCopy, SortEnum sortEnum){
-	//std::cout << std::endl << std::endl << "***** " << toString(sortEnum) << " *****" << std::endl;
-	//printArray(_array, ARRAY_SIZE, "Unsorted list :");
+double execution(int* _array, int* arrayCopy, SortEnum sortEnum, bool display = false){
+	if (display){
+		std::cout << std::endl << std::endl << "***** " << toString(sortEnum) << " *****" << std::endl;
+		printArray(_array, ARRAY_SIZE, "Unsorted list :");
+	}
 
 	double timeSpan = 0;
-	int i = 1, maxIterations = ARRAY_SIZE < 1000 ? 100 : 1;
+	int i = 1;
+	int maxIterations = ARRAY_SIZE < 5000 ? 100 : 1;
+	maxIterations = ARRAY_SIZE < 500 ? 1000 : 1;
 
 	// Execute the algorithm i times with the same array to improve the timer precision
 	for (i = 1; i <= maxIterations; i++){
@@ -148,27 +164,34 @@ double execution(int* _array, int* arrayCopy, SortEnum sortEnum){
 		timeSpan += time_span.count();
 	}
 
-	//printArray(arrayCopy, ARRAY_SIZE, "Sorted list : ");
-	//std::cout << "(" << time_span.count() / i << " ticks)" << std::endl << std::endl;
+	if (display) {
+		printArray(arrayCopy, ARRAY_SIZE, "Sorted list : ");
+		std::cout << "(" << timeSpan / i << " ticks)" << std::endl << std::endl;
+	}
 
 	return (timeSpan / i);
 }
 
-void sortDisplay(){
-	initSortMap();
-
+void sortAverageTime(SortType sortType = NON_SORTED){
+	int n = 1000;
+	std::vector<int> vector = {1, 2, 3, 5, 7, 10, 100};
 	// Use different size of arrays
-	for (int i = 1; i <= 100000; i *= 10){
-		ARRAY_SIZE = i;
+	for (auto it = vector.begin(); it != vector.end(); ++it){
+		ARRAY_SIZE = *it * n;
 		int* theArray = new int[ARRAY_SIZE], *arrayCopy = new int[ARRAY_SIZE];
 		std::list<std::pair<SortEnum, double>> resultList;
 		initResultList(&resultList);
 
-		std::cout << std::endl << std::endl << "|||||||||| ARRAY OF " << i << " ELEMENTS ||||||||||" << std::endl;
+		std::cout << std::endl << std::endl << "|||||||||| ARRAY OF " << *it * n << " ELEMENTS ||||||||||" << std::endl;
 
 		// Generate a new array and sort it with each algorithm i times
 		for (int i = 0; i < 10; i++){
 			fillArray(theArray);
+
+			if (sortType == SORTED)
+				execution(theArray, theArray, SortEnum::STL_SORTHEAP);
+			else if (sortType == REVERSED_SORTED)
+				std::sort(theArray, &theArray[ARRAY_SIZE - 1], std::greater<int>());
 
 			// Execute each sorting algorithms in the list
 			for (auto it = resultList.begin(); it != resultList.end(); ++it){
@@ -186,16 +209,57 @@ void sortDisplay(){
 	}
 }
 
+void sortDisplay(){
+	std::string input, options;
+	std::cout << std::endl << std::endl << "   Choisir une option : " << std::endl;
+
+	int sortEnum = 0;
+	for (sortEnum = 0; sortEnum != EndEnum; sortEnum++){
+		options.append("&" + std::to_string(sortEnum));
+		SortEnum en = static_cast<SortEnum>(sortEnum);
+		std::cout << "   " << sortEnum << " - " << toString(en) << std::endl;
+	}
+	std::cout << "   " << sortEnum << " - Temps moyens" << std::endl;
+	std::cin >> input;
+	
+	if (options.find("&" + input) != std::string::npos){
+		ARRAY_SIZE = 100;
+		int* theArray = new int[ARRAY_SIZE];
+		int* arrayCopy = new int[ARRAY_SIZE];
+
+		fillArray(theArray);
+
+		execution(theArray, arrayCopy, static_cast<SortEnum>(std::stoi(input)), true);
+
+		delete[] theArray, arrayCopy;
+	}
+	else {
+		std::cout << "   Choisir la maniere dont les elements seront disposes dans le tableau :" << std::endl
+			<< "0 - Non tries" << std::endl
+			<< "1 - Tries" << std::endl
+			<< "2 - Tries inverses" << std::endl;
+
+		std::cin >> input;
+		if (input == "1")
+			sortAverageTime(SortType::SORTED);
+		else if (input == "2")
+			sortAverageTime();
+		else
+			sortAverageTime(SortType::NON_SORTED);
+	}
+}
 
 int _tmain(int argc, _TCHAR* argv[]){
+	initSortMap();
+
 	std::cout << "TP1 - Dimitri BUHON" << std::endl;
 	std::string input;
-	while (input != "0"){
+	while (input != "q"){
 		std::cout << std::endl << "Choisir une option : " << std::endl
 			<< "1 - Strassen" << std::endl
 			<< "2 - Tri" << std::endl
 			<< "3 - Karatsuba" << std::endl
-			<< "0 - Quitter" << std::endl << std::endl;
+			<< "q - Quitter" << std::endl << std::endl;
 
 		std::cin >> input;
 
@@ -215,283 +279,4 @@ int _tmain(int argc, _TCHAR* argv[]){
 
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-#include <iostream>
-#include <math.h>
-#include <chrono>
-
-//Is this less offensive than using the entire std namespace?
-using std::cout;
-using std::endl;
-
-//These little functions are used by the heap-sort algorithm
-#define PARENT(i) ((i - 1) / 2)
-#define LEFT(i)   (2 * i + 1)
-#define RIGHT(i)  (2 * i + 2)
-
-
-
-//First comes bubble-sort, the most brute-force sorting method.
-//Bubble-sort is a simple sorting algorithm that repeatedly steps 
-//through the list to be sorted, compares each pair of adjacent items 
-//and swaps them if they are in the wrong order
-
-void bubble_sort(int list[], int size)
-{
-	int temp;
-	for (int i = 0; i<size; i++)
-	{
-		for (int j = size - 1; j>i; j--)
-		{
-			if (list[j]<list[j - 1])
-			{
-				temp = list[j - 1];
-				list[j - 1] = list[j];
-				list[j] = temp;
-			}
-		}
-	}
-}
-
-
-//Insertion sort is another n^2 algorithm, which works by taking each element
-//and inserting it into the proper spot.  Can work quickly on arrays that 
-//are either small or nearly sorted already.
-
-void insertion_sort(int list[], int size)
-{
-	for (int j = 1; j<size; j++)
-	{
-		int key = list[j];
-		int i = j - 1;
-		while (i>-1 && list[i]>key)
-		{
-			list[i + 1] = list[i];
-			i = i - 1;
-		}
-		list[i + 1] = key;
-
-	}
-}
-
-//Merge-sort is much faster than insertion-sort in general, and works by
-//dividing the array successively into smaller arrays, sorting them, and then
-//merging the results.  merge_sort is written as two functions, `merge` which takes two
-//pre-sorted lists and merges them to a single sorted list.  This is called on by merge_sort, 
-//which also recursively calls itself.
-
-void merge(int list[], int p, int q, int r)
-{
-	//n1 and n2 are the lengths of the pre-sorted sublists, list[p..q] and list[q+1..r]
-	int n1 = q - p + 1;
-	int n2 = r - q;
-	//copy these pre-sorted lists to L and R
-	int *L = new int[n1 + 1];
-	int *R = new int[n2 + 1];
-	for (int i = 0; i<n1; i++)
-	{
-		L[i] = list[p + i];
-	}
-	for (int j = 0; j<n2; j++)
-	{
-		R[j] = list[q + 1 + j];
-	}
-
-
-	//Create a sentinal value for L and R that is larger than the largest
-	//element of list
-	int largest;
-	if (L[n1 - 1]<R[n2 - 1]) largest = R[n2 - 1]; else largest = L[n1 - 1];
-	L[n1] = largest + 1;
-	R[n2] = largest + 1;
-
-	//Merge the L and R lists
-	int i = 0;
-	int j = 0;
-	for (int k = p; k <= r; k++)
-	{
-		if (L[i] <= R[j])
-		{
-			list[k] = L[i];
-			i++;
-		}
-		else
-		{
-			list[k] = R[j];
-			j++;
-		}
-	}
-
-	delete(R, L);
-}
-
-void merge_sort_aux(int list[], int p, int r)
-{
-	if (p<r)
-	{
-		int q = floor((p + r) / 2);
-		merge_sort_aux(list, p, q);
-		merge_sort_aux(list, q + 1, r);
-		merge(list, p, q, r);
-	}
-
-}
-
-void merge_sort(int list[], int size)
-{
-	merge_sort_aux(list, 0, size - 1);
-}
-
-//Heap-sort is a really interesting algorithm, which first arranges the 
-//array into a max-heap, before sorting.  In a max-heap, each element is 
-//greater than its 'children', LEFT and RIGHT.
-
-class heap
-{
-public:
-	int *nodes;
-	int length;
-	int heap_size;
-};
-
-//max_heapify places the element list[index] into the subarray list[index+1...], 
-//which is assumed to already be in max-heap form
-
-void max_heapify(heap list, int index)
-{
-
-	int left, right, largest, exchange_temp;
-
-	left = LEFT(index);
-	right = RIGHT(index);
-
-	if (left <list.heap_size && list.nodes[left] > list.nodes[index])
-	{
-		largest = left;
-	}
-	else
-	{
-		largest = index;
-	}
-
-	if (right <list.heap_size && list.nodes[right] > list.nodes[largest])
-	{
-		largest = right;
-	}
-
-
-	if (largest != index)
-	{
-		exchange_temp = list.nodes[index];
-		list.nodes[index] = list.nodes[largest];
-		list.nodes[largest] = exchange_temp;
-		max_heapify(list, largest);
-	}
-
-}
-
-//build_max_heap turns an array into max-heap form by repeatedly calling
-//max_heapify
-
-void build_max_heap(heap list)
-{
-	list.heap_size = list.length;
-	for (int i = floor(list.length / 2); i >= 0; i--)
-	{
-		max_heapify(list, i);
-	}
-}
-
-//Since one property of a max-heap is that the first element is the largest,
-//heap_sort swaps this element with the last element, then re-heapifies the 
-//rest, recursively until the whole array is sorted
-
-void heap_sort(int list[], int size)
-{
-	int exchange_temp;
-	heap tempheap;
-	tempheap.length = size;
-	tempheap.nodes = list;
-	tempheap.heap_size = size;
-	build_max_heap(tempheap);
-
-
-	for (int i = tempheap.length - 1; i >= 1; i--)
-	{
-		exchange_temp = tempheap.nodes[0];
-		tempheap.nodes[0] = tempheap.nodes[i];
-		tempheap.nodes[i] = exchange_temp;
-		tempheap.heap_size = tempheap.heap_size - 1;
-
-		max_heapify(tempheap, 0);
-	}
-
-}
-
-//Quicksort works by dividing the array based upon a 'pivot' element, everything
-//to the right of it are greater than or equal to the pivot, everything 
-//smaller than the pivot are moved to the left.  Then the left and right
-//arrays are sorted in the same way.  Works great on a random array, but
-//data that is nearly already sorted are very slow by this method.
-
-int partition(int list[], int p, int r)
-{
-	int pivot, index, exchange_temp;
-	pivot = list[r];
-	index = p - 1;
-	for (int i = p; i < r; i++)
-	{
-		if (list[i] <= pivot)
-		{
-			index++;
-			exchange_temp = list[i];
-			list[i] = list[index];
-			list[index] = exchange_temp;
-		}
-	}
-	exchange_temp = list[r];
-	list[r] = list[index + 1];
-	list[index + 1] = exchange_temp;
-	return index + 1;
-}
-
-void quicksort_aux(int list[], int p, int r)
-{
-	int q;
-	if (p<r)
-	{
-		q = partition(list, p, r);
-		quicksort_aux(list, p, q - 1);
-		quicksort_aux(list, q + 1, r);
-	}
-}
-
-void quick_sort(int list[], int size)
-{
-	quicksort_aux(list, 0, size - 1);
-}*/
 

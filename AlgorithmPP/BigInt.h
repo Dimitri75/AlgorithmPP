@@ -1,3 +1,5 @@
+// Dimitri BUHON - Karatsuba
+
 #pragma once
 class BigInt
 {

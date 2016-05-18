@@ -1,3 +1,5 @@
+// Dimitri BUHON - Strassen
+
 #include "stdafx.h"
 #include "matrix.h"
 

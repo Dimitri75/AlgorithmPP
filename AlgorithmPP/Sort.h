@@ -1,3 +1,5 @@
+// Dimitri BUHON - Algorithmes de tri
+
 #pragma once
 class Sort
 {

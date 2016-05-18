@@ -21,6 +21,7 @@
 #include <list>
 #include <array>
 #include <algorithm>
+#include <functional>
 
 #include "matrix.h"
 #include "bigint.h"

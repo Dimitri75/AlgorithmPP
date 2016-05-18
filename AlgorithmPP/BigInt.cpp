@@ -1,3 +1,4 @@
+// Dimitri BUHON - Karatsuba
 #include "stdafx.h"
 #include "BigInt.h"
 
