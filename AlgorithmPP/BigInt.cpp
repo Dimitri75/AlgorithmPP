@@ -127,14 +127,17 @@ void BigInt::carry() {
 		std::cout << stderr << " Overflow " << c << std::endl;
 }
 
+inline bool is_number(const std::string& s){
+	return count_if(s.begin(), s.end(), isdigit) == s.size();
+}
+
 void BigInt::getInput() {
 	std::string input;
 	int c = 0;
 
 	d_value = 0;
 	std::cout << "Entrez un nombre : ";
-	while (!(std::cin >> input))
-	{
+	while (!(std::cin >> input) || !is_number(input)){
 		std::cerr << "Erreur de saisie" << std::endl;
 		std::cout << "Nombre : ";
 	}
