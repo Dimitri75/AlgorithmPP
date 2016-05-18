@@ -1,4 +1,4 @@
-﻿La génération a démarré 15/05/2016 20:24:15.
+﻿La génération a démarré 16/05/2016 11:20:09.
      1>Projet "D:\DEV\C++\WORKSPACES\visual\AlgorithmPP\AlgorithmPP\AlgorithmPP.vcxproj" sur le nœud 2 (Build cible(s)).
      1>ClCompile:
          D:\DEV\MICROSOFT\IDE\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\AlgorithmPP.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
@@ -15,4 +15,4 @@
 
 La génération a réussi.
 
-Temps écoulé 00:00:01.22
+Temps écoulé 00:00:01.38

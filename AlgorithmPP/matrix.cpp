@@ -2,7 +2,6 @@
 #include "matrix.h"
 
 #define CUT 4
-const int MAX = 99;
 
 int random(int max, int min = 0){
 	std::random_device seeder;
@@ -92,7 +91,7 @@ void Matrix::initGrid(bool fil){
 		grid[row] = new int[n];
 
 		for (column = 0; column < order; column++){
-			grid[row][column] = fil ? random(MAX) : 0;
+			grid[row][column] = fil ? random(INT_MAX) : 0;
 		}
 	}
 

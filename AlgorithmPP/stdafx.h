@@ -18,7 +18,9 @@
 #include <conio.h>
 #include <cstdlib>
 #include <map>
+#include <list>
 #include <array>
+#include <algorithm>
 
 #include "matrix.h"
 #include "bigint.h"
